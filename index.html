@@ -1,752 +1,389 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sitecreator.ca | Web Architecture & Immersive UI</title>
-
-    <!-- Tailwind CSS -->
+    <title>Derrière le profil | Campagne contre la cyberintimidation</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
-                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+                    colors: {
+                        brandBlue: '#1e3a8a',
+                        brandGreen: '#059669',
+                        brandYellow: '#f59e0b',
+                        brandLightBg: '#f8fafc',
                     }
                 }
             }
         }
     </script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body.light-mode {
-            background-color: #ffffff !important;
-            color: #111827 !important;
-        }
-
-        body.dark-mode {
-            background-color: #000000 !important;
-            color: #f9fafb !important;
-        }
-
-        /* Scroll Reveal Animation Styles */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-
-        .scroll-reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .gf-root {
-            --gf-px: 0;
-            --gf-py: 0;
-            --gf-ease: cubic-bezier(.2, .8, .2, 1);
-            --gf-spring: cubic-bezier(.34, 1.36, .5, 1);
-            --gf-hinge: 0deg;
-            --gf-lift: 16px;
-            --gf-spread: 0px;
-            --gf-fan: 0deg;
-            --gf-stack: 0px;
-            position: relative;
-            display: inline-block;
-            vertical-align: top;
-            font-family: inherit;
-            isolation: isolate;
-        }
-
-        .gf-root:hover,
-        .gf-root:focus-within {
-            --gf-hinge: -10deg;
-            --gf-lift: 4px;
-        }
-
-        .gf-root[data-open] {
-            --gf-hinge: -28deg;
-            --gf-lift: -80px;
-            --gf-spread: 22px;
-            --gf-fan: 5deg;
-            --gf-stack: 14px;
-        }
-
-        .gf-stage {
-            position: relative;
-            width: 280px;
-            height: 270px;
-        }
-
-        .gf-tilt {
-            position: absolute;
-            inset: 0;
-            transform: perspective(1200px) rotateX(calc(var(--gf-py) * -3deg)) rotateY(calc(var(--gf-px) * 4deg));
-            transition: transform .9s var(--gf-ease);
-        }
-
-        .gf-shadow {
-            position: absolute;
-            left: 14px;
-            right: 14px;
-            bottom: 8px;
-            height: 50px;
-            border-radius: 30px;
-            background: rgba(0, 0, 0, .08);
-            filter: blur(18px);
-            transform: translateX(calc(var(--gf-px) * -6px));
-        }
-
-        body.dark-mode .gf-shadow {
-            background: rgba(0, 0, 0, .65);
-        }
-
-        .gf-back {
-            position: absolute;
-            inset: 0;
-            top: 35px;
-            height: 225px;
-            overflow: hidden;
-            background: linear-gradient(180deg, #f4f4f5 0%, #e4e4e7 100%);
-            z-index: 1;
-        }
-
-        body.dark-mode .gf-back {
-            background: linear-gradient(180deg, #2a2a2e 0%, #121214 100%);
-        }
-
-        .gf-rim {
-            position: absolute;
-            left: 0;
-            top: 35px;
-            width: 280px;
-            height: 225px;
-            overflow: visible;
-            pointer-events: none;
-            fill: none;
-            z-index: 2;
-        }
-
-        .gf-rim path {
-            stroke: rgba(0, 0, 0, .12);
-            stroke-width: 1;
-        }
-
-        body.dark-mode .gf-rim path {
-            stroke: rgba(255, 255, 255, .16);
-        }
-
-        .gf-files {
-            position: absolute;
-            inset: 0;
-            top: 35px;
-            height: 225px;
-            z-index: 5;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .gf-root[data-open] .gf-files {
-            pointer-events: auto;
-            overflow: visible;
-        }
-
-        .gf-sheet-slot {
-            display: contents;
-        }
-
-        .gf-sheet {
-            all: unset;
-            box-sizing: border-box;
-            position: absolute;
-            left: 24px;
-            top: 35px;
-            width: 232px;
-            height: 150px;
-            border-radius: 14px;
-            overflow: hidden;
-            cursor: pointer;
-            pointer-events: auto;
-            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1), 0 0 0 .5px rgba(0, 0, 0, .08), 0 12px 28px -6px rgba(0, 0, 0, .1);
-            transform-origin: 50% 100%;
-            transform: translate(calc(var(--gf-jx) + var(--gf-slot) * var(--gf-spread)), calc(var(--gf-lift) + var(--gf-depth) * var(--gf-stack) * -1)) rotate(calc(var(--gf-jr) + var(--gf-slot) * var(--gf-fan)));
-            transition: transform .5s cubic-bezier(.34, 1.36, .5, 1), box-shadow .3s ease, background .3s ease;
-            text-decoration: none;
-            display: block;
-        }
-
-        body.dark-mode .gf-sheet {
-            background: linear-gradient(180deg, #2c2c30 0%, #1c1c1f 100%);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 0 0 .5px rgba(255, 255, 255, .08), 0 12px 28px -6px rgba(0, 0, 0, .8);
-        }
-
-        .gf-root[data-open] .gf-sheet:hover {
-            transform: translate(calc(var(--gf-jx) + var(--gf-slot) * var(--gf-spread)), calc(var(--gf-lift) + var(--gf-depth) * var(--gf-stack) * -1 - 26px)) rotate(0deg) scale(1.04) !important;
-            z-index: 1000 !important;
-            background: linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%);
-            box-shadow: inset 0 1px 0 #fff, 0 20px 40px -8px rgba(0, 0, 0, .18);
-        }
-
-        body.dark-mode .gf-root[data-open] .gf-sheet:hover {
-            background: linear-gradient(180deg, #36363b 0%, #242428 100%);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 20px 40px -8px rgba(0, 0, 0, .95);
-        }
-
-        .gf-sheet-head {
-            position: absolute;
-            left: 12px;
-            right: 12px;
-            top: 12px;
-            z-index: 1;
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .gf-sheet-name {
-            font-size: 11.5px;
-            font-weight: 600;
-            color: #18181b;
-        }
-
-        body.dark-mode .gf-sheet-name {
-            color: #fafafa;
-        }
-
-        .gf-sheet-meta {
-            font-family: monospace;
-            font-size: 9.5px;
-            color: rgba(24, 24, 27, .55);
-        }
-
-        body.dark-mode .gf-sheet-meta {
-            color: rgba(250, 250, 250, .7);
-        }
-
-        .gf-lines {
-            position: absolute;
-            left: 12px;
-            right: 12px;
-            top: 38px;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .gf-lines i {
-            display: block;
-            height: 4px;
-            border-radius: 2px;
-            background: rgba(24, 24, 27, .08);
-        }
-
-        body.dark-mode .gf-lines i {
-            background: rgba(255, 255, 255, .1);
-        }
-
-        .gf-lines i:first-child {
-            height: 7px;
-            margin-bottom: 3px;
-            background: rgba(24, 24, 27, .15);
-        }
-
-        body.dark-mode .gf-lines i:first-child {
-            background: rgba(255, 255, 255, .18);
-        }
-
-        .gf-front {
-            position: absolute;
-            left: 0;
-            top: 95px;
-            width: 280px;
-            height: 160px;
-            z-index: 10;
-            backdrop-filter: blur(24px) saturate(1.6);
-            transform-origin: 50% 100%;
-            transform: perspective(760px) rotateX(var(--gf-hinge));
-            transition: transform .8s cubic-bezier(.34, 1.36, .5, 1);
-        }
-
-        .gf-tint {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(255, 255, 255, .55) 0%, rgba(245, 245, 250, .82) 46%, rgba(230, 230, 235, .96) 100%);
-        }
-
-        body.dark-mode .gf-tint {
-            background: linear-gradient(180deg, rgba(18, 18, 20, .18) 0%, rgba(14, 14, 16, .65) 46%, rgba(8, 8, 10, .96) 100%);
-        }
-
-        .gf-spec {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(220px 160px at 50% 30%, rgba(255, 255, 255, .9), transparent 70%);
-            mix-blend-mode: overlay;
-            opacity: .6;
-            pointer-events: none;
-        }
-
-        body.dark-mode .gf-spec {
-            mix-blend-mode: screen;
-            opacity: .2;
-            background: radial-gradient(220px 160px at 50% 30%, rgba(255, 255, 255, .25), transparent 70%);
-        }
-
-        .gf-hit {
-            all: unset;
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            cursor: pointer;
-        }
-
-        .gf-label {
-            position: absolute;
-            left: 22px;
-            bottom: 24px;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            color: #18181b;
-            pointer-events: none;
-        }
-
-        body.dark-mode .gf-label {
-            color: #f5f5f7;
-        }
-
-        .gf-title {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .gf-meta {
-            font-family: monospace;
-            font-size: 11px;
-            color: rgba(24, 24, 27, .6);
-        }
-
-        body.dark-mode .gf-meta {
-            color: rgba(245, 245, 247, .6);
+        body {
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
 
-<body class="light-mode min-h-screen relative overflow-x-hidden transition-colors duration-500">
+<body class="bg-brandLightBg text-slate-800 antialiased selection:bg-brandYellow selection:text-slate-900">
 
-    <!-- Tubes Cursor WebGL Canvas -->
-    <canvas id="tubes-canvas" class="fixed inset-0 z-0 pointer-events-auto cursor-pointer"
-        style="display: none;"></canvas>
-
-    <!-- Navigation Header -->
-    <nav
-        class="sticky top-0 z-40 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800/80 bg-white/90 dark:bg-neutral-950/75 px-8 py-5 backdrop-blur-md transition-colors duration-500">
-        <div class="flex items-center gap-2.5">
-            <div
-                class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 border border-cyan-500/30 font-mono text-xs font-bold text-cyan-600 dark:text-cyan-400">
-                &lt;S&gt;
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brandBlue to-brandGreen flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <span
+                    class="text-xl font-bold bg-gradient-to-r from-brandBlue to-brandGreen bg-clip-text text-transparent">Derrière
+                    le profil</span>
             </div>
-            <span class="font-mono text-sm font-medium tracking-tight text-neutral-900 dark:text-white">
-                sitecreator<span class="text-cyan-500 dark:text-cyan-400">.ca</span>
-            </span>
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+                <a href="#probleme" class="hover:text-brandBlue transition-colors">Le Problème</a>
+                <a href="#consequences" class="hover:text-brandBlue transition-colors">Conséquences</a>
+                <a href="#agir" class="hover:text-brandBlue transition-colors">Agir & Obtenir de l'aide</a>
+                <a href="#agir"
+                    class="bg-brandYellow hover:bg-amber-500 text-slate-900 font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Besoin
+                    d'aide ?</a>
+            </div>
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button id="menu-btn" class="text-slate-700 focus:outline-none p-2 rounded-lg hover:bg-slate-100">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
         </div>
-
-        <div class="flex items-center gap-6">
-            <div
-                class="hidden md:flex items-center gap-6 text-xs font-medium tracking-wider uppercase text-neutral-600 dark:text-neutral-400">
-                <a href="#work" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Work</a>
-                <a href="#services" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Services &
-                    Pricing</a>
-                <a href="#lab" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Effects Lab</a>
-            </div>
-
-            <!-- Circular Icon Button UI for Theme Toggle -->
-            <button id="theme-toggle"
-                class="relative flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 bg-gradient-to-b from-sky-100 to-sky-300 dark:from-neutral-900 dark:to-neutral-950 shadow-md hover:scale-105 transition-all cursor-pointer"
-                aria-label="Toggle theme">
-                <span id="theme-icon" class="text-sm">☀️</span>
-            </button>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-4 space-y-3">
+            <a href="#probleme" class="block py-2 text-slate-600 hover:text-brandBlue font-medium">Le Problème</a>
+            <a href="#consequences" class="block py-2 text-slate-600 hover:text-brandBlue font-medium">Conséquences</a>
+            <a href="#agir" class="block py-2 text-slate-600 hover:text-brandBlue font-medium">Agir & Obtenir de
+                l'aide</a>
+            <a href="#agir"
+                class="block text-center bg-brandYellow hover:bg-amber-500 text-slate-900 font-semibold py-2.5 rounded-xl shadow-sm">Besoin
+                d'aide ?</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section
-        class="relative z-10 flex flex-col items-center justify-center px-6 pt-24 pb-16 text-center pointer-events-none">
-        <div
-            class="scroll-reveal inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 mb-6 font-mono text-xs font-medium tracking-widest text-cyan-600 dark:text-cyan-400 uppercase pointer-events-auto">
-            <span class="h-1.5 w-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse"></span>
-            Web Architecture & Immersive UI
-        </div>
-
-        <h1
-            class="scroll-reveal max-w-4xl text-4xl sm:text-6xl md:text-7xl font-medium tracking-tight leading-[1.1] text-neutral-900 dark:text-white pointer-events-auto">
-            We build digital worlds that people actually want to touch.
-        </h1>
-
-        <p
-            class="scroll-reveal mt-5 max-w-xl text-base sm:text-lg font-normal leading-relaxed text-neutral-600 dark:text-neutral-400 pointer-events-auto">
-            Specializing in high-performance applications, tactile UI physics, and unforgettable web experiences.
-        </p>
-
-        <div class="scroll-reveal mt-10 flex flex-col sm:flex-row items-center gap-4 pointer-events-auto">
-            <a href="#work"
-                class="group relative flex items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-500 px-8 py-4 font-mono text-xs font-semibold uppercase tracking-widest text-white dark:text-neutral-950 shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.02]">
-                Explore Projects Desk
-            </a>
-            <a href="#services"
-                class="rounded-2xl border border-neutral-300 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/50 px-8 py-4 font-mono text-xs font-semibold uppercase tracking-widest text-neutral-800 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-700 transition-all">
-                View Pricing ($150 / $200)
-            </a>
-        </div>
-    </section>
-
-    <!-- Portfolio Workspace Section -->
-    <section id="work" class="relative z-10 px-6 pt-12 pb-28 overflow-visible">
-        <div class="scroll-reveal max-w-7xl mx-auto mb-16 text-center">
-            <h2 class="text-3xl sm:text-4xl font-medium tracking-tight text-neutral-900 dark:text-white">Interactive
-                Project Workspace</h2>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-                Hover to lean components toward you · Click folders to open live deployments
-            </p>
-        </div>
-
-        <div
-            class="scroll-reveal relative grid max-w-[1080px] mx-auto grid-cols-1 items-start justify-items-center gap-x-10 gap-y-32 md:grid-cols-2 xl:grid-cols-3">
-
-            <!-- Folder 1: Client Works -->
-            <div class="gf-root pointer-events-auto" style="width: 280px;">
-                <div class="gf-stage">
-                    <div class="gf-tilt">
-                        <div class="gf-shadow"></div>
-                        <div class="gf-back"
-                            style="clip-path: path('M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z')">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-br from-cyan-100 dark:from-cyan-950/70 to-neutral-200 dark:to-neutral-900/95 transition-colors duration-500">
-                            </div>
-                        </div>
-                        <svg class="gf-rim" viewBox="0 0 280 225">
-                            <path
-                                d="M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z" />
-                        </svg>
-
-                        <div class="gf-files">
-                            <a href="https://artish0k1234.github.io/khouri-solutions/" target="_blank"
-                                rel="noopener noreferrer" class="gf-sheet"
-                                style="--gf-slot: 0; --gf-depth: 0; --gf-jx: 0px; --gf-jr: 0deg; z-index: 1;">
-                                <div class="gf-sheet-head">
-                                    <span class="gf-sheet-name">Khouri Solutions</span>
-                                    <span class="gf-sheet-meta">Live ↗</span>
-                                </div>
-                                <div class="gf-lines"><i style="width: 86%;"></i><i style="width: 92%;"></i><i
-                                        style="width: 64%;"></i></div>
-                            </a>
-                        </div>
-
-                        <div class="gf-front"
-                            style="clip-path: path('M0 18A18 18 0 0 1 18 0L96 0C116 0 118 26 138 26L262 26A18 18 0 0 1 280 44L280 142A18 18 0 0 1 262 160L18 160A18 18 0 0 1 0 142Z')">
-                            <div class="gf-tint"></div>
-                            <div class="gf-spec"></div>
-                            <button class="gf-hit"
-                                onclick="this.closest('.gf-root').toggleAttribute('data-open')"></button>
-                            <div class="gf-label">
-                                <span class="gf-title">Client Works</span>
-                                <span class="gf-meta">1 Live Site (More to come)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Folder 2: Experiments -->
-            <div class="gf-root pointer-events-auto" style="width: 280px;">
-                <div class="gf-stage">
-                    <div class="gf-tilt">
-                        <div class="gf-shadow"></div>
-                        <div class="gf-back"
-                            style="clip-path: path('M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z')">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-br from-emerald-100 dark:from-emerald-950/70 to-neutral-200 dark:to-neutral-900/95 transition-colors duration-500">
-                            </div>
-                        </div>
-                        <svg class="gf-rim" viewBox="0 0 280 225">
-                            <path
-                                d="M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z" />
-                        </svg>
-
-                        <div class="gf-files">
-                            <a href="https://artish0k1234.github.io/Plomberie-St-Mars-Inc/" target="_blank"
-                                rel="noopener noreferrer" class="gf-sheet"
-                                style="--gf-slot: -1; --gf-depth: 2; --gf-jx: -6px; --gf-jr: -3deg; z-index: 1;">
-                                <div class="gf-sheet-head"><span class="gf-sheet-name">Plomberie St-Mars</span><span
-                                        class="gf-sheet-meta">Live ↗</span></div>
-                                <div class="gf-lines"><i style="width: 80%;"></i><i style="width: 90%;"></i></div>
-                            </a>
-                            <a href="https://artish0k1234.github.io/Les-Services-Accent/" target="_blank"
-                                rel="noopener noreferrer" class="gf-sheet"
-                                style="--gf-slot: 0; --gf-depth: 1; --gf-jx: 0px; --gf-jr: 0deg; z-index: 2;">
-                                <div class="gf-sheet-head"><span class="gf-sheet-name">Les Services Accent</span><span
-                                        class="gf-sheet-meta">Live ↗</span></div>
-                                <div class="gf-lines"><i style="width: 85%;"></i><i style="width: 75%;"></i></div>
-                            </a>
-                            <a href="https://artish0k1234.github.io/Chromex-Eletrique-Inc/" target="_blank"
-                                rel="noopener noreferrer" class="gf-sheet"
-                                style="--gf-slot: 1; --gf-depth: 0; --gf-jx: 6px; --gf-jr: 3deg; z-index: 3;">
-                                <div class="gf-sheet-head"><span class="gf-sheet-name">Chromex Électrique</span><span
-                                        class="gf-sheet-meta">Live ↗</span></div>
-                                <div class="gf-lines"><i style="width: 90%;"></i><i style="width: 60%;"></i></div>
-                            </a>
-                        </div>
-
-                        <div class="gf-front"
-                            style="clip-path: path('M0 18A18 18 0 0 1 18 0L96 0C116 0 118 26 138 26L262 26A18 18 0 0 1 280 44L280 142A18 18 0 0 1 262 160L18 160A18 18 0 0 1 0 142Z')">
-                            <div class="gf-tint"></div>
-                            <div class="gf-spec"></div>
-                            <button class="gf-hit"
-                                onclick="this.closest('.gf-root').toggleAttribute('data-open')"></button>
-                            <div class="gf-label">
-                                <span class="gf-title">Experiments</span>
-                                <span class="gf-meta">3 Active Deployments</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Folder 3: Open Source -->
-            <div class="gf-root pointer-events-auto" style="width: 280px;">
-                <div class="gf-stage">
-                    <div class="gf-tilt">
-                        <div class="gf-shadow"></div>
-                        <div class="gf-back"
-                            style="clip-path: path('M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z')">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-br from-indigo-100 dark:from-indigo-950/70 to-neutral-200 dark:to-neutral-900/95 transition-colors duration-500">
-                            </div>
-                        </div>
-                        <svg class="gf-rim" viewBox="0 0 280 225">
-                            <path
-                                d="M0 16A18 18 0 0 1 18 -6L120 -6C138 -6 140 -34 158 -34L262 -34A18 18 0 0 1 280 -16L280 208A18 18 0 0 1 262 226L18 226A18 18 0 0 1 0 208Z" />
-                        </svg>
-
-                        <div class="gf-files">
-                            <a href="https://artish0k1234.github.io/Atomik2.0/" target="_blank"
-                                rel="noopener noreferrer" class="gf-sheet"
-                                style="--gf-slot: 0; --gf-depth: 0; --gf-jx: 0px; --gf-jr: 0deg; z-index: 1;">
-                                <div class="gf-sheet-head">
-                                    <span class="gf-sheet-name">Atomik 2.0</span>
-                                    <span class="gf-sheet-meta">Live ↗</span>
-                                </div>
-                                <div class="gf-lines"><i style="width: 88%;"></i><i style="width: 95%;"></i><i
-                                        style="width: 70%;"></i></div>
-                            </a>
-                        </div>
-
-                        <div class="gf-front"
-                            style="clip-path: path('M0 18A18 18 0 0 1 18 0L96 0C116 0 118 26 138 26L262 26A18 18 0 0 1 280 44L280 142A18 18 0 0 1 262 160L18 160A18 18 0 0 1 0 142Z')">
-                            <div class="gf-tint"></div>
-                            <div class="gf-spec"></div>
-                            <button class="gf-hit"
-                                onclick="this.closest('.gf-root').toggleAttribute('data-open')"></button>
-                            <div class="gf-label">
-                                <span class="gf-title">Open Source</span>
-                                <span class="gf-meta">Atomik Framework</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Section 2: Services & Transparent Pricing ($150 / $200) -->
-    <section id="services"
-        class="relative z-10 px-6 py-28 border-y border-neutral-200 dark:border-neutral-900 bg-neutral-50 dark:bg-neutral-950/80 transition-colors duration-500">
-        <div class="scroll-reveal max-w-5xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-medium tracking-tight text-neutral-900 dark:text-white">Services &
-                    Transparent Pricing</h2>
-                <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">Clear rates, elite execution. No hidden
-                    fees.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                <!-- Standard Tier ($150) -->
-                <div
-                    class="flex flex-col justify-between rounded-3xl p-8 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all shadow-sm">
-                    <div>
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 class="text-xl font-medium text-neutral-900 dark:text-white">Standard Website</h3>
-                                <p class="text-xs mt-1 text-neutral-600 dark:text-neutral-400">Ideal for portfolios,
-                                    landing pages, and small brands.</p>
-                            </div>
-                            <span class="font-mono text-2xl font-semibold text-cyan-600 dark:text-cyan-400">$150</span>
-                        </div>
-                        <ul class="space-y-3.5 text-sm mb-8 text-neutral-700 dark:text-neutral-300">
-                            <li class="flex items-center gap-2.5">✓ Modern responsive layout & mobile optimization</li>
-                            <li class="flex items-center gap-2.5">✓ Clean typography & fast page loading</li>
-                            <li class="flex items-center gap-2.5">✓ Contact form & social media links integration</li>
-                            <li class="flex items-center gap-2.5">✓ Delivered within 3–5 business days</li>
-                        </ul>
-                    </div>
-                    <a href="mailto:contact@sitecreator.ca?subject=Standard Website Inquiry ($150)"
-                        class="w-full text-center rounded-xl py-3.5 font-mono text-xs uppercase tracking-widest font-semibold border border-neutral-300 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:border-cyan-500 transition-colors">
-                        Book Standard Build
-                    </a>
-                </div>
-
-                <!-- Custom Interactive Tier ($200) -->
-                <div
-                    class="relative flex flex-col justify-between rounded-3xl p-8 border border-cyan-500/40 bg-gradient-to-b from-cyan-50 dark:from-cyan-950/30 to-white dark:to-neutral-900/80 transition-all shadow-xl">
-                    <div
-                        class="absolute -top-3.5 right-8 rounded-full bg-cyan-500 px-3.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-white dark:text-neutral-950">
-                        Most Popular
-                    </div>
-                    <div>
-                        <div class="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 class="text-xl font-medium text-neutral-900 dark:text-white">Custom Interactive
-                                    Website</h3>
-                                <p class="text-xs mt-1 text-neutral-600 dark:text-neutral-400">Advanced UI components,
-                                    shaders, and immersive motion.</p>
-                            </div>
-                            <span class="font-mono text-2xl font-semibold text-cyan-600 dark:text-cyan-400">$200</span>
-                        </div>
-                        <ul class="space-y-3.5 text-sm mb-8 text-neutral-700 dark:text-neutral-300">
-                            <li class="flex items-center gap-2.5">✓ Everything in Standard, plus custom UI physics</li>
-                            <li class="flex items-center gap-2.5">✓ Interactive components (Glass Folders, Shaders)</li>
-                            <li class="flex items-center gap-2.5">✓ Tailored dark/light mode engine & animations</li>
-                            <li class="flex items-center gap-2.5">✓ Priority delivery & ongoing support</li>
-                        </ul>
-                    </div>
-                    <a href="mailto:contact@sitecreator.ca?subject=Custom Interactive Website Inquiry ($200)"
-                        class="w-full text-center rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 py-3.5 font-mono text-xs uppercase tracking-widest font-semibold text-white dark:text-neutral-950 shadow-md shadow-cyan-500/20 hover:opacity-95 transition-opacity">
-                        Book Custom Interactive Build
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 3: The Custom Special Effects Lab -->
-    <section id="lab"
-        class="px-6 py-28 relative z-10 overflow-hidden bg-white dark:bg-neutral-950 transition-colors duration-500">
-        <div class="scroll-reveal max-w-4xl mx-auto text-center mb-12">
+    <header
+        class="relative overflow-hidden bg-gradient-to-b from-blue-50/60 via-emerald-50/30 to-brandLightBg py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <span
-                class="font-mono text-xs font-semibold tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">Valence
-                Core Integration</span>
-            <h2 class="text-3xl sm:text-4xl font-medium tracking-tight text-neutral-900 dark:text-white mt-3">The Custom
-                Special Effects Lab</h2>
-            <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
-                Interactive shader button component engineered for high-end engagement.
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 text-brandBlue font-semibold text-xs sm:text-sm mb-6 shadow-sm">
+                <i class="fa-solid fa-bullhorn"></i> Campagne de sensibilisation scolaire
+            </span>
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
+                Derrière le profil
+            </h1>
+            <p class="text-xl sm:text-2xl lg:text-3xl font-medium text-brandGreen max-w-3xl mx-auto mb-10 italic">
+                « La cyberintimidation est virtuelle, la souffrance est réelle »
             </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#probleme"
+                    class="w-full sm:w-auto bg-brandBlue hover:bg-blue-900 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all">
+                    Découvrir la campagne <i class="fa-solid fa-arrow-down ml-2"></i>
+                </a>
+                <a href="#agir"
+                    class="w-full sm:w-auto bg-brandYellow hover:bg-amber-500 text-slate-900 font-semibold px-8 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all">
+                    Trouver du soutien
+                </a>
+            </div>
         </div>
+    </header>
 
-        <div
-            class="scroll-reveal max-w-4xl mx-auto h-[420px] w-full rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 relative bg-neutral-100 dark:bg-neutral-950 shadow-2xl flex items-center justify-center transition-colors duration-500">
-            <button type="button"
-                class="relative flex items-center justify-center w-[280px] h-[88px] rounded-2xl overflow-hidden cursor-pointer border border-cyan-500/30 bg-white dark:bg-neutral-950 shadow-lg shadow-cyan-500/10 transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98] group">
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 opacity-50 group-hover:opacity-100 transition-opacity">
+    <!-- Main Content -->
+    <main>
+
+        <!-- Section: Le Problème -->
+        <section id="probleme" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Le Problème</h2>
+                    <div class="w-20 h-1.5 bg-brandBlue mx-auto rounded-full mb-6"></div>
+                    <p class="text-lg text-slate-600">Comprendre ce qu'est la cyberintimidation et mesurer son ampleur
+                        chez les jeunes.</p>
                 </div>
-                <span
-                    class="relative z-10 font-mono text-xs font-semibold tracking-[0.3em] uppercase text-neutral-800 dark:text-cyan-100 drop-shadow-[0_0_10px_rgba(0,242,254,0.6)]">
-                    VALENCE CORE
-                </span>
-            </button>
-        </div>
-    </section>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <!-- Stat Card -->
+                    <div
+                        class="bg-gradient-to-br from-blue-900 to-brandBlue text-white p-8 sm:p-12 rounded-3xl shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-10 -bottom-10 text-white/5 text-9xl font-bold pointer-events-none">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <span
+                            class="bg-brandYellow text-slate-900 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Statistique
+                            clé</span>
+                        <div class="text-5xl sm:text-6xl font-extrabold text-brandYellow my-6">Plus d'1 sur 10</div>
+                        <p class="text-lg sm:text-xl text-blue-100 font-light leading-relaxed">
+                            C'est la proportion de personnes touchées par l'intimidation ou la cyberintimidation au
+                            Québec selon les données officielles.
+                        </p>
+                        <p class="mt-4 text-xs text-blue-200/80 font-medium">— Source : Institut de la statistique du
+                            Québec</p>
+                    </div>
+
+                    <!-- Definition Box -->
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4 bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-brandBlue text-white flex items-center justify-center shrink-0 shadow-md">
+                                <i class="fa-solid fa-laptop-code text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Qu'est-ce que la cyberintimidation ?
+                                </h3>
+                                <p class="text-slate-600 leading-relaxed">
+                                    C'est un comportement agressif et répété commis à l'aide des technologies numériques
+                                    (réseaux sociaux, messageries, jeux en ligne). Cela inclut le partage de photos
+                                    embarrassantes, la création de faux comptes, l'exclusion volontaire ou l'envoi de
+                                    messages haineux.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex items-start space-x-4 bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-brandGreen text-white flex items-center justify-center shrink-0 shadow-md">
+                                <i class="fa-solid fa-fingerprint text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Une empreinte permanente</h3>
+                                <p class="text-slate-600 leading-relaxed">
+                                    Contrairement au harcèlement physique, ce qui est publié en ligne peut être copié,
+                                    partagé et persister pendant des années, amplifiant la détresse de la personne
+                                    visée.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Les Conséquences -->
+        <section id="consequences" class="py-20 bg-brandLightBg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Les Conséquences</h2>
+                    <div class="w-20 h-1.5 bg-brandGreen mx-auto rounded-full mb-6"></div>
+                    <p class="text-lg text-slate-600">Quels sont les impacts de la cyberintimidation sur le bien-être
+                        des adolescents ?</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1: Santé mentale -->
+                    <div
+                        class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-blue-100 text-brandBlue flex items-center justify-center text-2xl mb-6 shadow-sm">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Santé mentale fragile</h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Sentiment d'anxiété accru, baisse d'estime de soi, stress permanent et, dans les cas
+                                graves, épisodes dépressifs profonds liés au sentiment d'impuissance.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                            Impact psychologique</div>
+                    </div>
+
+                    <!-- Card 2: Sommeil -->
+                    <div
+                        class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-emerald-100 text-brandGreen flex items-center justify-center text-2xl mb-6 shadow-sm">
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Perturbation du sommeil</h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                L'hyperconnexion et la peur constante de router ou de voir de nouveaux messages néfastes
+                                nuisent grandement à la qualité et au nombre d'heures de sommeil.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                            Impact physique</div>
+                    </div>
+
+                    <!-- Card 3: Isolement et École -->
+                    <div
+                        class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-md transition-shadow border border-slate-100 flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl mb-6 shadow-sm">
+                                <i class="fa-solid fa-school"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Isolement & Scolarité</h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Repli sur soi, évitement des activités sociales, baisse de motivation scolaire,
+                                absentéisme et difficulté à se concentrer en classe.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-100 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                            Impact social</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Agir & Obtenir de l'aide -->
+        <section id="agir" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Agir & Obtenir de l'aide</h2>
+                    <div class="w-20 h-1.5 bg-brandYellow mx-auto rounded-full mb-6"></div>
+                    <p class="text-lg text-slate-600">Que tu sois victime ou témoin, tu as le pouvoir de changer les
+                        choses.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+                    <!-- Pour les victimes -->
+                    <div
+                        class="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 sm:p-10 rounded-3xl border border-blue-100 shadow-sm">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-brandBlue text-white flex items-center justify-center font-bold text-lg shadow-md">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900">Conseils pour les victimes</h3>
+                        </div>
+                        <ul class="space-y-4 text-slate-700">
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandBlue mt-1"></i>
+                                <span><strong>Ne réponds pas :</strong> Répondre risque d'envenimer la situation. Bloque
+                                    l'utilisateur.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandBlue mt-1"></i>
+                                <span><strong>Conserve des preuves :</strong> Fais des captures d'écran (screen) des
+                                    messages ou publications offensantes.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandBlue mt-1"></i>
+                                <span><strong>Parle-en :</strong> Confie-toi immédiatement à un adulte de confiance
+                                    (parent, enseignant, intervenant scolaire).</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Pour les témoins -->
+                    <div
+                        class="bg-gradient-to-br from-emerald-50 to-teal-50 p-8 sm:p-10 rounded-3xl border border-emerald-100 shadow-sm">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-brandGreen text-white flex items-center justify-center font-bold text-lg shadow-md">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-slate-900">Conseils pour les témoins</h3>
+                        </div>
+                        <ul class="space-y-4 text-slate-700">
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandGreen mt-1"></i>
+                                <span><strong>Ne participe pas :</strong> Ne clique jamais sur "J'aime", ne partage pas
+                                    et ne commente pas une publication malveillante.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandGreen mt-1"></i>
+                                <span><strong>Soutiens la victime :</strong> Envoie un message privé rassurant à la
+                                    personne touchée pour lui montrer qu'elle n'est pas seule.</span>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <i class="fa-solid fa-circle-check text-brandGreen mt-1"></i>
+                                <span><strong>Signale :</strong> Utilise les outils de signalement de la plateforme ou
+                                    avertis l'école.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Ressources d'aide -->
+                <div class="bg-slate-900 text-white p-8 sm:p-12 rounded-3xl shadow-xl">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <span
+                            class="bg-brandYellow text-slate-900 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full">Ressources
+                            disponibles</span>
+                        <h3 class="text-2xl sm:text-3xl font-bold mt-4 mb-6">Besoin d'aide ou d'écoute ?</h3>
+                        <p class="text-slate-300 mb-8 leading-relaxed">
+                            Ne reste jamais seul avec ce poids. Des professionnels sont là pour t'écouter de façon
+                            confidentielle et gratuite.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+                            <div class="bg-white/10 p-6 rounded-2xl border border-white/10">
+                                <h4 class="font-bold text-brandYellow mb-1"><i class="fa-solid fa-school mr-2"></i>À
+                                    l'école secondaire</h4>
+                                <p class="text-sm text-slate-300">Consulte ton intervenant, ton psychoéducateur, ton
+                                    éducateur spécialisé ou un enseignant de confiance.</p>
+                            </div>
+                            <div class="bg-white/10 p-6 rounded-2xl border border-white/10">
+                                <h4 class="font-bold text-brandYellow mb-1"><i class="fa-solid fa-phone mr-2"></i>Lignes
+                                    d'aide externes</h4>
+                                <p class="text-sm text-slate-300">Tel-Jeunes (1 800 263-2266 ou texto au 514 600-1002)
+                                    ou Jeunesse, J'écoute (1 800 668-6868).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
 
     <!-- Footer -->
-    <footer
-        class="border-t border-neutral-200 dark:border-neutral-900 bg-white dark:bg-neutral-950 px-8 py-12 text-center text-neutral-600 dark:text-neutral-500 relative z-10 transition-colors duration-500">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <span class="font-mono text-xs tracking-wider">© 2026 sitecreator.ca. All rights reserved.</span>
-            <a href="mailto:contact@sitecreator.ca"
-                class="font-mono text-xs text-cyan-600 dark:text-cyan-400 hover:underline">contact@sitecreator.ca</a>
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brandBlue to-brandGreen flex items-center justify-center text-white">
+                        <i class="fa-solid fa-shield-halved text-sm"></i>
+                    </div>
+                    <span class="text-white font-bold text-lg">Derrière le profil</span>
+                </div>
+                <div class="text-sm text-center md:text-right">
+                    <p class="text-slate-300 font-medium mb-1">Campagne de sensibilisation contre l'intimidation</p>
+                    <p class="text-xs text-slate-500">Français, langue d'enseignement — Secondaire 4</p>
+                </div>
+            </div>
+            <div
+                class="pt-8 border-t border-slate-900 text-xs flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 Campagne Derrière le profil. Tous droits réservés.</p>
+                <div class="flex flex-wrap gap-4 text-slate-500">
+                    <span>Sources officielles :</span>
+                    <a href="https://www.inspq.qc.ca/intimidation/jeunes/cyberintimidation" target="_blank"
+                        class="hover:text-brandYellow transition-colors underline">INSPQ</a>
+                    <a href="https://statistique.quebec.ca" target="_blank"
+                        class="hover:text-brandYellow transition-colors underline">Statistique Québec</a>
+                    <a href="https://www.unicef.org" target="_blank"
+                        class="hover:text-brandYellow transition-colors underline">UNICEF</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script type="module">
-        import TubesCursor from 'https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js';
+    <!-- Interactive script for mobile menu toggle -->
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-        const canvas = document.getElementById('tubes-canvas');
-        let cursorApp = null;
-
-        const randomColors = (count) => {
-            return new Array(count).fill(0).map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
-        };
-
-        const initCursor = () => {
-            if (!cursorApp && canvas) {
-                cursorApp = TubesCursor(canvas, {
-                    tubes: {
-                        radius: 0.6,
-                        colors: ["#5e72e4", "#8965e0", "#f5365c"],
-                        lights: {
-                            intensity: 150,
-                            colors: ["#21d4fd", "#b721ff", "#f4d03f", "#11cdef"]
-                        }
-                    }
-                });
-            }
-        };
-
-        window.addEventListener('click', () => {
-            if (cursorApp) {
-                cursorApp.tubes.setColors(randomColors(3));
-                cursorApp.tubes.setLightsColors(randomColors(4));
-            }
-        });
-
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const htmlElement = document.documentElement;
-        const bodyElement = document.body;
-
-        themeToggle.addEventListener('click', () => {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                htmlElement.classList.add('light');
-                bodyElement.classList.remove('dark-mode');
-                bodyElement.classList.add('light-mode');
-                themeIcon.textContent = '☀️';
-                if (canvas) canvas.style.display = 'none';
-            } else {
-                htmlElement.classList.remove('light');
-                htmlElement.classList.add('dark');
-                bodyElement.classList.remove('light-mode');
-                bodyElement.classList.add('dark-mode');
-                themeIcon.textContent = '🌙';
-                if (canvas) canvas.style.display = 'block';
-                initCursor();
-            }
-        });
-
-        // Intersection Observer for scroll reveal
-        document.addEventListener("DOMContentLoaded", () => {
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15 });
-
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-                observer.observe(el);
-            });
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
 </body>
